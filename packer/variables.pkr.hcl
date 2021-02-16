@@ -1,16 +1,16 @@
 variable "ami_name_prefix" {
   type        = string
+  default     = "nagios-host"
   description = "The prefix string that will be used for the name tags of the resulting AMI and snapshot(s); the version string will be appended automatically"
 }
-
 variable "ansible_host_alias" {
   type        = string
+  default     = "nagios-host"
   description = "The Ansible host alias"
 }
-
 variable "aws_instance_type" {
   type        = string
-  default     = "t2.small"
+  default     = "t3.medium"
   description = "The EC2 instance type used when building the AMI"
 }
 
@@ -22,13 +22,13 @@ variable "aws_region" {
 
 variable "aws_source_ami_filter_name" {
   type        = string
-  default     = "CentOS 8* x86_64*"
+  default     = "centos7-base*"
   description = "The source AMI filter string. Any filter described by the DescribeImages API documentation is valid. If multiple images match then the latest will be used"
 }
 
 variable "aws_source_ami_owner_id" {
   type        = string
-  default     = "125523088429"
+  default     = "self"
   description = "The source AMI owner ID; used in combination with aws_source_ami_filter_name to filter for matching source AMIs"
 }
 

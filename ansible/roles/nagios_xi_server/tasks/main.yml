@@ -1,0 +1,59 @@
+---
+# tasks file for ansible-nagiosxi-server
+
+- name: fetch latest stable release
+  get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.7.5.tar.gz dest=/tmp
+
+- name: extact latest release
+  unarchive: src=/tmp/xi-5.7.5.tar.gz dest=/tmp copy=no creates=/tmp/nagiosxi
+
+- name: Install epel-release Package
+  yum:
+    name: ['epel-release' ,'initscripts', 'openssh-server', 'ncurses', 'crontabs', 'dnf-plugins-core', 'cronie']
+    state: present
+
+- name: Install PHP packages
+  yum:
+    name: ['php', 'php-fpm', 'php-common']
+    state: present
+
+- name: Upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: fix php-fpm config file to comment out acl users
+  replace:
+    path: /etc/php-fpm.d/www.conf
+    regexp: 'listen.acl_users'
+    replace: ';listen.acl_users'
+
+- name: fix php-fpm config file to uncomment and update owner
+  replace:
+    path: /etc/php-fpm.d/www.conf
+    regexp: ';listen.owner = nobody'
+    replace: 'listen.owner = apache'
+
+- name: fix php-fpm config file to uncomment and update group
+  replace:
+    path: /etc/php-fpm.d/www.conf
+    regexp: ';listen.group = nobody'
+    replace: 'listen.group = apache'
+    
+# Nagios XI full Installation
+- name: perform (non-interactive) full install
+  command: ./fullinstall -n
+  args:
+    chdir: /tmp/nagiosxi
+    creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
+
+# Custom Configuration
+- name: copy custom config files
+  copy: src=files/{{ item }} dest={{ nagios_conf_dir }}
+  # with_fileglob: 
+  #   - "*.cfg"
+  mode: 0644
+  with_items: '{{ nagios_custom_config_files }}'
+
+- name: reconfigure command to import the configs
+  command: sh {{ nagiosxi_script_path }}/reconfigure_nagios.sh
