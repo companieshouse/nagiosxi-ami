@@ -1,13 +1,21 @@
+variable "ami_account_ids" {
+  type        = list(string)
+  default     = []
+  description = "A list of account IDs that have access to launch the resulting AMI(s)"
+}
+
 variable "ami_name_prefix" {
   type        = string
   default     = "nagios-host"
   description = "The prefix string that will be used for the name tags of the resulting AMI and snapshot(s); the version string will be appended automatically"
 }
+
 variable "ansible_host_alias" {
   type        = string
   default     = "nagios-host"
   description = "The Ansible host alias"
 }
+
 variable "aws_instance_type" {
   type        = string
   default     = "t3.medium"
