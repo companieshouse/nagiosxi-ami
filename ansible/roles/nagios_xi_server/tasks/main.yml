@@ -5,7 +5,7 @@
   get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.7.5.tar.gz dest=/tmp
 
 - name: extact latest release
-  unarchive: src=/tmp/xi-5.7.5.tar.gz dest=/tmp copy=no creates=/tmp/nagiosxi
+  unarchive: src=/tmp/xi-5.7.5.tar.gz dest=/tmp copy=no creates={{ nagios_install_dir }}
 
 - name: Install epel-release Package
   yum:
@@ -24,27 +24,27 @@
 
 - name: fix php-fpm config file to comment out acl users
   replace:
-    path: /etc/php-fpm.d/www.conf
+    path: "{{ nagios_php_config_path }}"
     regexp: 'listen.acl_users'
     replace: ';listen.acl_users'
 
 - name: fix php-fpm config file to uncomment and update owner
   replace:
-    path: /etc/php-fpm.d/www.conf
+    path: "{{ nagios_php_config_path }}"
     regexp: ';listen.owner = nobody'
-    replace: 'listen.owner = apache'
+    replace: 'listen.owner = {{ nagios_http_user }}'
 
 - name: fix php-fpm config file to uncomment and update group
   replace:
-    path: /etc/php-fpm.d/www.conf
+    path: "{{ nagios_php_config_path }}"
     regexp: ';listen.group = nobody'
-    replace: 'listen.group = apache'
+    replace: 'listen.group = {{ nagios_http_user }}'
     
 # Nagios XI full Installation
 - name: perform (non-interactive) full install
   command: ./fullinstall -n
   args:
-    chdir: /tmp/nagiosxi
+    chdir: "{{ nagios_install_dir }}"
     creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
 
 # Custom Configuration
@@ -57,3 +57,8 @@
 
 - name: reconfigure command to import the configs
   command: sh {{ nagiosxi_script_path }}/reconfigure_nagios.sh
+
+# Restart Nagios Service
+- name: restart nagios service
+  command: systemctl restart nagios.service
+  become: true

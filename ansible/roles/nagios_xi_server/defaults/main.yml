@@ -1,4 +1,3 @@
 ---
 nagios_custom_config_files:
   - ec2-groups.cfg
-  - service_templates.cfg

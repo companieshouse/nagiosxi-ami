@@ -1,12 +1,6 @@
 ---
 nagios_conf_dir: /usr/local/nagios/etc/import/
 nagiosxi_script_path: /usr/local/nagiosxi/scripts
-
-
-# nagios_db_path: /usr/local/nagios/etc
-# nagiosxi_config_path: /usr/local/nagiosxi/html
-# nagios_backup_path: /root/scripts/automysqlbackup
-# nagios_db_host: 172.17.0.3
-# nagios_db_user: nagios
-# nagios_db_pwd: nagiosP@ssw0rd
-# nagiosxi_db_pwd: nagiosxi
+nagios_php_config_path: /etc/php-fpm.d/www.conf
+nagios_http_user: apache
+nagios_install_dir: /tmp/nagiosxi
