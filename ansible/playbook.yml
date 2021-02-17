@@ -1,4 +1,4 @@
----  
+---
 - name: AMI Build
   hosts: nagios-server
   become: true
