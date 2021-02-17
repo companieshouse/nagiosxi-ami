@@ -1,6 +1,6 @@
 ---  
 - name: AMI Build
-  hosts: nagios-host
+  hosts: nagios-server
   become: true
   gather_facts: yes
   roles:
