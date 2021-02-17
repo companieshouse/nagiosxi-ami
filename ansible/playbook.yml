@@ -4,4 +4,5 @@
   become: true
   gather_facts: yes
   roles:
+    - role: epel
     - role: nagios-xi-server
