@@ -1,8 +1,7 @@
 ---
-- name: Nagios AMI Build
-  hosts: nagios-server
+- hosts: nagios-server
   become: true
   gather_facts: yes
   roles:
-    - role: epel
-    - role: nagios-xi-server
+    - epel
+    - nagios-xi-server
