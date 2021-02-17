@@ -3,5 +3,4 @@
   hosts: nagios-server
   become: true
   gather_facts: yes
-  roles: 
-    - nagios-xi-server
+  role: nagios-xi-server
