@@ -43,6 +43,7 @@
 # Nagios XI full Installation
 - name: perform (non-interactive) full install
   command: ./fullinstall -n
+  become: true
   args:
     chdir: "{{ nagios_install_dir }}"
     creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
