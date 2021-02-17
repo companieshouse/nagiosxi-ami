@@ -49,10 +49,10 @@
 
 # Custom Configuration
 - name: copy custom config files
-  copy: src=files/{{ item }} dest={{ nagios_conf_dir }}
-  # with_fileglob: 
-  #   - "*.cfg"
-  mode: 0644
+  copy: 
+    src: files/{{ item }} 
+    dest: "{{ nagios_conf_dir }}"
+    mode: 0644
   with_items: '{{ nagios_custom_config_files }}'
 
 - name: reconfigure command to import the configs
