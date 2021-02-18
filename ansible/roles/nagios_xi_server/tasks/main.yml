@@ -5,7 +5,12 @@
   get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.7.5.tar.gz dest=/tmp
 
 - name: extact latest release
-  unarchive: src=/tmp/xi-5.7.5.tar.gz dest=/tmp copy=no creates=/tmp/nagiosxi
+  unarchive: 
+    src: /tmp/xi-5.7.5.tar.gz 
+    dest: /tmp 
+    copy: no 
+    mode: 0644 
+    creates: /tmp/nagiosxi
 
 - name: Install epel-release Package
   yum:
@@ -43,7 +48,6 @@
 # Nagios XI full Installation
 - name: perform (non-interactive) full install
   command: ./fullinstall -n
-  become: yes
   args:
     chdir: /tmp/nagiosxi
     creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
