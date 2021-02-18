@@ -9,7 +9,7 @@
     src: /tmp/xi-5.7.5.tar.gz 
     dest: /tmp 
     copy: no 
-    mode: 0755 
+    mode: 0755
     creates: /tmp/nagiosxi
 
 - name: Install epel-release Package
@@ -48,6 +48,7 @@
 # Nagios XI full Installation
 - name: perform (non-interactive) full install
   command: ./fullinstall -n
+  mode: 0777
   args:
     chdir: /tmp/nagiosxi
     creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
