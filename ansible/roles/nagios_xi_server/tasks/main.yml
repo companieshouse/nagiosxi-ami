@@ -2,15 +2,14 @@
 # tasks file for ansible-nagiosxi-server
 
 - name: fetch latest stable release
-  get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.7.5.tar.gz dest=/tmp
+  get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.7.5.tar.gz dest=/root
 
 - name: extact latest release
   unarchive: 
-    src: /tmp/xi-5.7.5.tar.gz 
-    dest: /tmp 
-    copy: no 
-    mode: 0755
-    creates: /tmp/nagiosxi
+    src: /root/xi-5.7.5.tar.gz 
+    dest: /root 
+    copy: no
+    creates: /root/nagiosxi
 
 - name: Install epel-release Package
   yum:
@@ -49,7 +48,7 @@
 - name: perform (non-interactive) full install
   command: ./fullinstall -n
   args:
-    chdir: /tmp/nagiosxi
+    chdir: /root/nagiosxi
     creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
 
 # Custom Configuration
