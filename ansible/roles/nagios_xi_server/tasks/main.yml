@@ -9,7 +9,7 @@
     src: /tmp/xi-5.7.5.tar.gz 
     dest: /tmp 
     copy: no 
-    mode: 0644 
+    mode: 0755 
     creates: /tmp/nagiosxi
 
 - name: Install epel-release Package
