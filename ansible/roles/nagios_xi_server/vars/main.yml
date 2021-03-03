@@ -1,0 +1,6 @@
+---
+nagios_conf_dir: /usr/local/nagios/etc/import/
+nagiosxi_script_path: /usr/local/nagiosxi/scripts
+nagios_php_config_path: /etc/php-fpm.d/www.conf
+nagios_http_user: apache
+nagios_install_dir: /tmp/nagiosxi
