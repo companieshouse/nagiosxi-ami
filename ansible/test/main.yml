@@ -1,21 +1,26 @@
 ---
-- name: Deploy Centos8 Container
+- name: Deploy Centos7 Container
   hosts: localhost
   gather_facts: false
   vars:
     inventory:
       - name: nagios-server
-        image: "larenard/centos8-systemd"
+        image: "vasistaops/centos7-systemd"
         command: "/usr/sbin/init"
         ports: 
           - "8081:80"
         links: 
-          - "testsql:aliasmysql"
-        provision_docker_volumes: 
+          - "nagiosdb:aliasmysql"
+        provision_docker_volumes:
+          - /lib/modules:/lib/modules
           - /sys/fs/cgroup:/sys/fs/cgroup:ro
   roles:
     - role: provision_docker
       provision_docker_inventory: "{{ inventory }}"
       provision_docker_privileged: True
+
+- name: Setup docker pre-reqs
+  hosts: nagios-server
+  become: true
 
 - import_playbook: ../playbook.yml

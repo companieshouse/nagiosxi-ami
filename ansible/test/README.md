@@ -1,4 +1,4 @@
-# RHEL 6 Base AMI testing
+# Nagios AMI Testing - Centos 7 Based
 
 A simple docker setup to cover testing of Ansible.
 
