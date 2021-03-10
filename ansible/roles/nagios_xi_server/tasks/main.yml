@@ -38,7 +38,7 @@
     regexp: ';listen.group = nobody'
     replace: 'listen.group = {{ nagios_http_user }}'
     
- - name: Remove conflict packages
+- name: Remove conflict packages
    yum:
      name: nrpe-4.0.3-2.el7.x86_64
      state: absent
