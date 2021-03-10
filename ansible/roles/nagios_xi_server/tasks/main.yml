@@ -1,19 +1,19 @@
 ---
 # tasks file for ansible-nagiosxi-server
 
-- name: fetch latest stable release
-  get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.7.5.tar.gz dest=/root
+- name: Fetch Nagios latest stable release
+  get_url: url=https://assets.nagios.com/downloads/nagiosxi/5/xi-5.8.2.tar.gz dest=/root
 
-- name: extact latest release
+- name: Extact Nagios latest release
   unarchive: 
-    src: /root/xi-5.7.5.tar.gz 
+    src: /root/xi-5.8.2.tar.gz 
     dest: /root 
     copy: no
     creates: /root/nagiosxi
 
-- name: Install epel-release Package
+- name: Install packages
   yum:
-    name: ['epel-release' ,'initscripts', 'openssh-server', 'ncurses', 'crontabs', 'dnf-plugins-core', 'cronie']
+    name: ['epel-release' ,'initscripts', 'openssh-server', 'ncurses', 'crontabs', 'cronie', 'which']
     state: present
 
 - name: Install PHP packages
@@ -26,19 +26,13 @@
     name: '*'
     state: latest
 
-- name: fix php-fpm config file to comment out acl users
-  replace:
-    path: "{{ nagios_php_config_path }}"
-    regexp: 'listen.acl_users'
-    replace: ';listen.acl_users'
-
-- name: fix php-fpm config file to uncomment and update owner
+- name: PHP-FPM Config - update owner
   replace:
     path: "{{ nagios_php_config_path }}"
     regexp: ';listen.owner = nobody'
     replace: 'listen.owner = {{ nagios_http_user }}'
 
-- name: fix php-fpm config file to uncomment and update group
+- name: PHP-FPM Config - update group
   replace:
     path: "{{ nagios_php_config_path }}"
     regexp: ';listen.group = nobody'
@@ -46,29 +40,24 @@
     
 # Nagios XI full Installation
 
-- name: remove conflict packages
-  yum:
-    name: nrpe-4.0.3-2.el7.x86_64
-    state: absent
-     
-- name: perform (non-interactive) full install
+- name: Nagios Full Install
   command: ./fullinstall -n
   args:
     chdir: /root/nagiosxi
     creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-NAGIOS
 
 # Custom Configuration
-- name: copy custom config files
+- name: Copy Nagios custom config files 
   copy: 
     src: files/{{ item }} 
     dest: "{{ nagios_conf_dir }}"
     mode: 0644
   with_items: '{{ nagios_custom_config_files }}'
 
-- name: reconfigure command to import the configs
+- name: Reconfigure Nagios to apply custom config
   command: sh {{ nagiosxi_script_path }}/reconfigure_nagios.sh
 
 # Restart Nagios Service
-- name: restart nagios service
+- name: Restart Nagios service
   command: systemctl restart nagios.service
   become: true
