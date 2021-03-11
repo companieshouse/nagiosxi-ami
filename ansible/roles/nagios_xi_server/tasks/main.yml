@@ -39,9 +39,9 @@
     replace: 'listen.group = {{ nagios_http_user }}'
     
 - name: Remove conflict packages
-   yum:
-     name: nrpe-4.0.3-2.el7.x86_64
-     state: absent
+  yum:
+    name: nrpe-4.0.3-2.el7.x86_64
+    state: absent
 
 # Nagios XI full Installation
 
