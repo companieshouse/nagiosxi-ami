@@ -3,5 +3,10 @@
   hosts: nagios-server
   become: true
   gather_facts: yes
+  pre_tasks:
+    - name: make sure NRPE is not installed
+      package:
+        name: nrpe
+        state: absent
   roles:
     - role: nagios_xi_server
